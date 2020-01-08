@@ -11,7 +11,8 @@
         <input type="checkbox" v-model="todo.completed">
         <div v-if="!todo.editing" 
           @dblclick="editTodo(todo)" 
-          class="todo-item-label">
+          class="todo-item-label"
+          :class="{ completed : todo.completed }">
             {{todo.title}}</div>
         <input v-else 
           class="todo-item-edit" 
@@ -25,6 +26,15 @@
       <div class="remove-item" @click="removeTodo(index)">
         &times;
       </div>
+    </div>
+    <div class="extra-container">
+      <div class="">
+        <label for="">
+          <input type="checkbox">
+          Check all
+        </label>
+      </div>
+      <div class="">{{remaining}} items left</div>
     </div>
   </div>
 </template>
@@ -60,6 +70,11 @@ export default {
           editing: false
         },
       ]
+    }
+  },
+  computed: {
+    remaining() {
+      return this.todos.filter(todo => !todo.completed).length
     }
   },
   directives: {
