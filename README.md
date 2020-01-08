@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # todo
 
 ## Project setup
@@ -22,3 +23,7 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# vue-todo
+Checklist functionaliteit
+>>>>>>> 652a7641941d266aacfff92ffc2479c5d3af8f17
