@@ -8,6 +8,7 @@
       @keyup.enter="addTodo">
     <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
       <div class="todo-item-left">
+        <input type="checkbox" v-model="todo.completed">
         <div v-if="!todo.editing" 
           @dblclick="editTodo(todo)" 
           class="todo-item-label">
