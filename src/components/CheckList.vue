@@ -117,6 +117,43 @@ export default {
                 editing: false
                 }
               ]
+            },
+            {
+              id: 2,
+              title: '2. Buitenkant van het huis',
+              description: 'Subgroep',
+              completed: false,
+              editing: false,
+              tasks:[
+                {
+                id: 1,
+                title: 'Dakvlak / dakpannen',
+                description: '',
+                completed: false,
+                editing: false
+                },
+                {
+                id: 2,
+                title: 'Metsel- / voegwerk',
+                description: '',
+                completed: false,
+                editing: false
+                },
+                {
+                id: 3,
+                title: 'Geveltimmerwerk',
+                description: '',
+                completed: false,
+                editing: false
+                },
+                {
+                id: 4,
+                title: 'Kozijnen / ramen',
+                description: '',
+                completed: false,
+                editing: false
+                }
+              ]
             }
           ],
         },
