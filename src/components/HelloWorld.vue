@@ -22,10 +22,12 @@
           @keyup.enter="doneEdit(todo)" 
           @keyup.esc="cancelEdit(todo)" 
           v-focus>
+          <div v-for="todoTask in todo.todoTasks" :key="todoTask.id" class="todo-item-child">{{todoTask.title}}</div>
       </div>
       <div class="remove-item" @click="removeTodo(index)">
         &times;
       </div>
+      
     </div>
     <div class="extra-container">
       <div class="">
@@ -50,10 +52,26 @@ export default {
       todos: [
         {
           id: 1,
-          title: 'Afvoer controleren op afvoercapaciteit',
-          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+          title: 'Afvoer',
+          description: 'Hoofdgroep',
           completed: false,
-          editing: false
+          editing: false,
+          todoTasks:[
+            {
+            id: 1,
+            title: 'Afvoer controleren op afvoercapaciteit',
+            description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
+            completed: false,
+            editing: false
+            },
+            {
+            id: 2,
+            title: 'Afvoer opnieuw aanleggen',
+            description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
+            completed: false,
+            editing: false
+            }
+          ]
         },
         {
           id: 2,
@@ -68,6 +86,70 @@ export default {
           description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
           completed: false,
           editing: false
+        },
+      ],
+      checklist: [ 
+        {
+          id: 1,
+          title: 'De woning van buiten',
+          completed: false,
+          editing: false,
+          subGroups: [
+            {
+              id: 1,
+              title: '1. Rondom de woning',
+              description: 'Subgroep',
+              completed: false,
+              editing: false,
+              tasks:[
+                {
+                id: 1,
+                title: 'paden / terrassen',
+                description: '',
+                completed: false,
+                editing: false
+                },
+                {
+                id: 2,
+                title: 'Tuinafwerking',
+                description: '',
+                completed: false,
+                editing: false
+                }
+              ]
+            }
+          ],
+        },
+        {
+          id: 2,
+          title: 'In het huis',
+          completed: false,
+          editing: false,
+          subGroups: [
+            {
+              id: 1,
+              title: '1. Installaties',
+              description: 'Subgroep',
+              completed: false,
+              editing: false,
+              tasks:[
+                {
+                id: 1,
+                title: 'C.V.-ketel',
+                description: '',
+                completed: false,
+                editing: false
+                },
+                {
+                id: 2,
+                title: 'Warmtevoorziening',
+                description: '',
+                completed: false,
+                editing: false
+                }
+              ]
+            }
+          ],
         },
       ]
     }
@@ -149,12 +231,17 @@ export default {
   }
   .todo-item-left { // later
     display: flex;
-    align-items: center;
+    align-items: left;
+    flex-direction: column;
   }
   .todo-item-label {
     padding: 10px;
     border: 1px solid white;
     margin-left: 12px;
+  }
+  .todo-item-child {
+    display: flex;
+    
   }
   .todo-item-edit {
     font-size: 24px;
