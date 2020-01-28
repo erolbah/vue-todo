@@ -1,12 +1,12 @@
 <template>
   <div class="hello">
-    <h1>Hi</h1>
+    <h1>Bouwwerk controlelijst</h1>
     <input type="text" 
       class="todo-input" 
       placeholder="Voer handmatig checklist item in" 
       v-model="newTodo" 
       @keyup.enter="addTodo">
-    <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
+    <div v-for="(todo, index) in todosFiltered" :key="todo.id" class="todo-item">
       <div class="todo-item-left">
         <input type="checkbox" v-model="todo.completed">
         <div v-if="!todo.editing" 
@@ -22,9 +22,9 @@
           @keyup.enter="doneEdit(todo)" 
           @keyup.esc="cancelEdit(todo)" 
           v-focus>
-          <div v-for="subGroup in todo.subGroups" :key="subGroup.id" class="todo-item">{{subGroup.title}}
+          <!-- <div v-for="subGroup in todo.subGroups" :key="subGroup.id">{{subGroup.title}}
             <div v-for="task in subGroup.tasks" :key="task.id" class="todo-item-child">{{task.title}}</div>
-          </div>
+          </div> -->
       </div>
       <div class="remove-item" @click="removeTodo(index)">
         &times;
@@ -34,11 +34,20 @@
     <div class="extra-container">
       <div class="">
         <label for="">
-          <input type="checkbox">
+          <input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">
           Check all
         </label>
       </div>
       <div class="">{{remaining}} items left</div>
+    </div>
+    <div class="extra-container">
+      <div class="">
+        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">Alles</button>
+        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Actief</button>
+        <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</button>
+      </div>
+      <div class="">
+        <button v-if="showClearCompletedButton" @click="clearCompleted">Clear completed</button></div>
     </div>
   </div>
 </template>
@@ -51,151 +60,169 @@ export default {
       newTodo: '',
       beforeEditCache: '',
       idForTodo: 4, 
-      // todos: [
-      //   {
-      //     id: 1,
-      //     title: 'Afvoer',
-      //     description: 'Hoofdgroep',
-      //     completed: false,
-      //     editing: false,
-      //     todoTasks:[
-      //       {
-      //       id: 1,
-      //       title: 'Afvoer controleren op afvoercapaciteit',
-      //       description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
-      //       completed: false,
-      //       editing: false
-      //       },
-      //       {
-      //       id: 2,
-      //       title: 'Afvoer opnieuw aanleggen',
-      //       description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
-      //       completed: false,
-      //       editing: false
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     id: 2,
-      //     title: 'Oplevering glaswerk',
-      //     description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
-      //     completed: false,
-      //     editing: false
-      //   },
-      //   {
-      //     id: 3,
-      //     title: 'Beschadigingen op kozijnwerk controleren',
-      //     description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
-      //     completed: false,
-      //     editing: false
-      //   },
-      // ],
-      todos: [ 
+      filter: 'all',
+      todos: [
         {
           id: 1,
-          title: 'De woning van buiten',
+          title: 'Afvoer',
+          description: 'Hoofdgroep',
           completed: false,
           editing: false,
-          subGroups: [
+          todoTasks:[
             {
-              id: 1,
-              title: '1. Rondom de woning',
-              description: 'Subgroep',
-              completed: false,
-              editing: false,
-              tasks:[
-                {
-                id: 1,
-                title: 'paden / terrassen',
-                description: '',
-                completed: false,
-                editing: false
-                },
-                {
-                id: 2,
-                title: 'Tuinafwerking',
-                description: '',
-                completed: false,
-                editing: false
-                }
-              ]
+            id: 1,
+            title: 'Afvoer controleren op afvoercapaciteit',
+            description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
+            completed: false,
+            editing: false
             },
             {
-              id: 2,
-              title: '2. Buitenkant van het huis',
-              description: 'Subgroep',
-              completed: false,
-              editing: false,
-              tasks:[
-                {
-                id: 1,
-                title: 'Dakvlak / dakpannen',
-                description: '',
-                completed: false,
-                editing: false
-                },
-                {
-                id: 2,
-                title: 'Metsel- / voegwerk',
-                description: '',
-                completed: false,
-                editing: false
-                },
-                {
-                id: 3,
-                title: 'Geveltimmerwerk',
-                description: '',
-                completed: false,
-                editing: false
-                },
-                {
-                id: 4,
-                title: 'Kozijnen / ramen',
-                description: '',
-                completed: false,
-                editing: false
-                }
-              ]
+            id: 2,
+            title: 'Afvoer opnieuw aanleggen',
+            description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
+            completed: false,
+            editing: false
             }
-          ],
+          ]
         },
         {
           id: 2,
-          title: 'In het huis',
+          title: 'Oplevering glaswerk',
+          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
           completed: false,
-          editing: false,
-          subGroups: [
-            {
-              id: 1,
-              title: '1. Installaties',
-              description: 'Subgroep',
-              completed: false,
-              editing: false,
-              tasks:[
-                {
-                id: 1,
-                title: 'C.V.-ketel',
-                description: '',
-                completed: false,
-                editing: false
-                },
-                {
-                id: 2,
-                title: 'Warmtevoorziening',
-                description: '',
-                completed: false,
-                editing: false
-                }
-              ]
-            }
-          ],
+          editing: false
         },
-      ]
-    }
+        {
+          id: 3,
+          title: 'Beschadigingen op kozijnwerk controleren',
+          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+          completed: false,
+          editing: false
+        },
+      ],
+    //   todos: [ 
+    //     {
+    //       id: 1,
+    //       title: 'De woning van buiten',
+    //       completed: false,
+    //       editing: false,
+    //       subGroups: [
+    //         {
+    //           id: 1,
+    //           title: '1. Rondom de woning',
+    //           description: 'Subgroep',
+    //           completed: false,
+    //           editing: false,
+    //           tasks:[
+    //             {
+    //             id: 1,
+    //             title: 'paden / terrassen',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             },
+    //             {
+    //             id: 2,
+    //             title: 'Tuinafwerking',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           id: 2,
+    //           title: '2. Buitenkant van het huis',
+    //           description: 'Subgroep',
+    //           completed: false,
+    //           editing: false,
+    //           tasks:[
+    //             {
+    //             id: 1,
+    //             title: 'Dakvlak / dakpannen',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             },
+    //             {
+    //             id: 2,
+    //             title: 'Metsel- / voegwerk',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             },
+    //             {
+    //             id: 3,
+    //             title: 'Geveltimmerwerk',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             },
+    //             {
+    //             id: 4,
+    //             title: 'Kozijnen / ramen',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             }
+    //           ]
+    //         }
+    //       ],
+    //     },
+    //     {
+    //       id: 2,
+    //       title: 'In het huis',
+    //       completed: false,
+    //       editing: false,
+    //       subGroups: [
+    //         {
+    //           id: 1,
+    //           title: '1. Installaties',
+    //           description: 'Subgroep',
+    //           completed: false,
+    //           editing: false,
+    //           tasks:[
+    //             {
+    //             id: 1,
+    //             title: 'C.V.-ketel',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             },
+    //             {
+    //             id: 2,
+    //             title: 'Warmtevoorziening',
+    //             description: '',
+    //             completed: false,
+    //             editing: false
+    //             }
+    //           ]
+    //         }
+    //       ],
+    //     },
+    //   ]
+     }
   },
   computed: {
     remaining() {
       return this.todos.filter(todo => !todo.completed).length
+    },
+    anyRemaining() {
+      // controleerd computed property remaining, als deze niet 0 is dan false.
+      return this.remaining != 0
+    },
+    todosFiltered() {
+      if(this.filter === 'all'){
+        return this.todos
+      } else if (this.filter === 'active') {
+        return this.todos.filter(todo => !todo.completed)
+      } else if (this.filter === 'completed') {
+        return this.todos.filter(todo => todo.completed)
+      }
+      return this.todos
+    },
+    showClearCompletedButton() {
+      return this.todos.filter(todo => todo.completed).length > 0
     }
   },
   directives: {
@@ -237,6 +264,12 @@ export default {
     cancelEdit(todo) {
       todo.title = this.beforeEditCache
       todo.editing = false
+    },
+    checkAllTodos() {
+      this.todos.forEach((todo) => todo.completed = event.target.checked)
+    },
+    clearCompleted() {
+      this.todos = this.todos.filter(todo => !todo.completed)
     }
   }
 }
@@ -270,17 +303,12 @@ export default {
   }
   .todo-item-left { // later
     display: flex;
-    align-items: left;
-    flex-direction: column;
+    align-items: center;
   }
   .todo-item-label {
     padding: 10px;
     border: 1px solid white;
     margin-left: 12px;
-  }
-  .todo-item-child {
-    display: flex;
-    
   }
   .todo-item-edit {
     font-size: 24px;
