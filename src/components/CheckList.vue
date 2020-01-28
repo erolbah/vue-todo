@@ -6,31 +6,32 @@
       placeholder="Voer handmatig checklist item in" 
       v-model="newTodo" 
       @keyup.enter="addTodo">
-    <div v-for="(todo, index) in todosFiltered" :key="todo.id" class="todo-item">
-      <div class="todo-item-left">
-        <input type="checkbox" v-model="todo.completed">
-        <div v-if="!todo.editing" 
-          @dblclick="editTodo(todo)" 
-          class="todo-item-label"
-          :class="{ completed : todo.completed }">
-            {{todo.title}}</div>
-        <input v-else 
-          class="todo-item-edit" 
-          type="text" 
-          v-model="todo.title" 
-          @blur="doneEdit(todo)" 
-          @keyup.enter="doneEdit(todo)" 
-          @keyup.esc="cancelEdit(todo)" 
-          v-focus>
-          <!-- <div v-for="subGroup in todo.subGroups" :key="subGroup.id">{{subGroup.title}}
-            <div v-for="task in subGroup.tasks" :key="task.id" class="todo-item-child">{{task.title}}</div>
-          </div> -->
+    <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
+      <div v-for="(todo, index) in todosFiltered" :key="todo.id" class="todo-item">
+        <div class="todo-item-left">
+          <input type="checkbox" v-model="todo.completed">
+          <div v-if="!todo.editing" 
+            @dblclick="editTodo(todo)" 
+            class="todo-item-label"
+            :class="{ completed : todo.completed }">
+              {{todo.title}}</div>
+          <input v-else 
+            class="todo-item-edit" 
+            type="text" 
+            v-model="todo.title" 
+            @blur="doneEdit(todo)" 
+            @keyup.enter="doneEdit(todo)" 
+            @keyup.esc="cancelEdit(todo)" 
+            v-focus>
+            <!-- <div v-for="subGroup in todo.subGroups" :key="subGroup.id">{{subGroup.title}}
+              <div v-for="task in subGroup.tasks" :key="task.id" class="todo-item-child">{{task.title}}</div>
+            </div> -->
+        </div>
+        <div class="remove-item" @click="removeTodo(index)">
+          &times;
+        </div>
       </div>
-      <div class="remove-item" @click="removeTodo(index)">
-        &times;
-      </div>
-      
-    </div>
+    </transition-group>
     <div class="extra-container">
       <div class="">
         <label for="">
@@ -47,7 +48,10 @@
         <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</button>
       </div>
       <div class="">
-        <button v-if="showClearCompletedButton" @click="clearCompleted">Clear completed</button></div>
+        <transition name="fade">
+          <button v-if="showClearCompletedButton" @click="clearCompleted">Clear completed</button>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
