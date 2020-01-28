@@ -22,7 +22,9 @@
           @keyup.enter="doneEdit(todo)" 
           @keyup.esc="cancelEdit(todo)" 
           v-focus>
-          <div v-for="todoTask in todo.todoTasks" :key="todoTask.id" class="todo-item-child">{{todoTask.title}}</div>
+          <div v-for="subGroup in todo.subGroups" :key="subGroup.id" class="todo-item">{{subGroup.title}}
+            <div v-for="task in subGroup.tasks" :key="task.id" class="todo-item-child">{{task.title}}</div>
+          </div>
       </div>
       <div class="remove-item" @click="removeTodo(index)">
         &times;
@@ -49,46 +51,46 @@ export default {
       newTodo: '',
       beforeEditCache: '',
       idForTodo: 4, 
-      todos: [
-        {
-          id: 1,
-          title: 'Afvoer',
-          description: 'Hoofdgroep',
-          completed: false,
-          editing: false,
-          todoTasks:[
-            {
-            id: 1,
-            title: 'Afvoer controleren op afvoercapaciteit',
-            description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
-            completed: false,
-            editing: false
-            },
-            {
-            id: 2,
-            title: 'Afvoer opnieuw aanleggen',
-            description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
-            completed: false,
-            editing: false
-            }
-          ]
-        },
-        {
-          id: 2,
-          title: 'Oplevering glaswerk',
-          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
-          completed: false,
-          editing: false
-        },
-        {
-          id: 3,
-          title: 'Beschadigingen op kozijnwerk controleren',
-          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
-          completed: false,
-          editing: false
-        },
-      ],
-      checklist: [ 
+      // todos: [
+      //   {
+      //     id: 1,
+      //     title: 'Afvoer',
+      //     description: 'Hoofdgroep',
+      //     completed: false,
+      //     editing: false,
+      //     todoTasks:[
+      //       {
+      //       id: 1,
+      //       title: 'Afvoer controleren op afvoercapaciteit',
+      //       description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
+      //       completed: false,
+      //       editing: false
+      //       },
+      //       {
+      //       id: 2,
+      //       title: 'Afvoer opnieuw aanleggen',
+      //       description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
+      //       completed: false,
+      //       editing: false
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     id: 2,
+      //     title: 'Oplevering glaswerk',
+      //     description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+      //     completed: false,
+      //     editing: false
+      //   },
+      //   {
+      //     id: 3,
+      //     title: 'Beschadigingen op kozijnwerk controleren',
+      //     description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+      //     completed: false,
+      //     editing: false
+      //   },
+      // ],
+      todos: [ 
         {
           id: 1,
           title: 'De woning van buiten',
