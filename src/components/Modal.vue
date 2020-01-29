@@ -10,6 +10,12 @@
             </slot>
           </div>
 
+          <div class="modal-header">
+            <slot name="subHeader">
+              default subheader
+            </slot>
+          </div>
+
           <div class="modal-body">
             <slot name="body">
               default body
@@ -19,8 +25,11 @@
           <div class="modal-footer">
             <slot name="footer">
               default footer
-              <button class="modal-default-button" @click="$emit('close')">
+              <button class="modal-default-button" @click="doneEdit(todo.id)">
                 OK
+              </button>
+              <button class="modal-default-button" @click="$emit('close')">
+                NIET OK
               </button>
             </slot>
           </div>
@@ -32,7 +41,33 @@
 
 <script>
 export default {
-
+  name: 'modal',
+  props: {
+    todo: {
+      type: Object,
+      required: true,
+    }
+  },
+  data() {
+    return {
+      id: this.todo.id,
+      title: this.todo.title,
+      description: this.description,
+      completed: this.todo.completed,
+      editing: this.todo.editing,
+      beforeEditCache: '',
+      showModal: false
+    }
+  },
+  methods: {
+    doneEdit() {
+      this.editing = false
+      this.$emit('finishedEditModal', {
+        description: this.description,
+        editing: this.editing,
+      })
+    },
+  }
 }
 </script>
 

@@ -6,17 +6,16 @@
       <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </div>
     <div v-if="!todo.description==''" class="description-item" @click="editRemark(todo.id)">
-      [0]
+      &#9978;
     </div>
     <div class="remove-item" @click="removeTodo(todo.id)">
       &times;
     </div>
     <modal v-if="showModal" @close="showModal = false">
-      <!--
-        you can use custom content here to overwrite
-        default content
-      -->
-      <p slot="body">{{todo.description}}</p>
+      <h2 slot="header">{{todo.title}}</h2>
+      <h3 slot="subHeader">Opmerking:</h3>
+      <!-- <p slot="body" v-if="!editing" @dblclick="editTodo" :class="{ completed : completed }">{{ description }}</p> -->
+      <input class="todo-item-edit" type="text" v-model="todo.description" slot="body" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </modal>
   </div>
 </template>
