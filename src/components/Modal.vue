@@ -25,7 +25,7 @@
           <div class="modal-footer">
             <slot name="footer">
               default footer
-              <button class="modal-default-button" @click="doneEdit(todo.id)">
+              <button class="modal-default-button" @blur="doneEdit" @keyup.enter="doneEdit" @click="doneEdit">
                 OK
               </button>
               <button class="modal-default-button" @click="$emit('close')">
@@ -56,13 +56,14 @@ export default {
       completed: this.todo.completed,
       editing: this.todo.editing,
       beforeEditCache: '',
-      showModal: false
+      showModal: true
     }
   },
   methods: {
     doneEdit() {
       this.editing = false
       this.$emit('finishedEditModal', {
+        id: this.todo.id,
         description: this.description,
         editing: this.editing,
       })

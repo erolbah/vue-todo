@@ -5,17 +5,22 @@
       <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed }">{{ title }}</div>
       <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </div>
-    <div v-if="!todo.description==''" class="description-item" @click="editRemark(todo.id)">
-      &#9978;
+    <!-- Wel een description -->
+    <div v-if="!todo.description==''||todo.description" class="description-item" @click="editRemark">
+      &#9917;
+    </div>
+    <!-- Geen description -->
+    <div v-if="todo.description==''|| todo.description === undefined" class="description-item" @click="editRemark">
+      &#9918;
     </div>
     <div class="remove-item" @click="removeTodo(todo.id)">
       &times;
     </div>
-    <modal v-if="showModal" @close="showModal = false">
+    <modal v-bind="$props" v-if="showModal" @finishedEditModal="finishedEditModal">
       <h2 slot="header">{{todo.title}}</h2>
       <h3 slot="subHeader">Opmerking:</h3>
       <!-- <p slot="body" v-if="!editing" @dblclick="editTodo" :class="{ completed : completed }">{{ description }}</p> -->
-      <input class="todo-item-edit" type="text" v-model="todo.description" slot="body" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
+      <input class="todo-item-edit" type="text" v-model="description" slot="body" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </modal>
   </div>
 </template>
@@ -93,6 +98,14 @@ export default {
     },
     editRemark() {
       this.showModal = true
+    },
+    finishedEditModal(data) {
+      if(data.description === null){
+        return this.todo.description === ''
+      }
+      this.todo.description === data.decription
+      // alert(this.data)
+      this.showModal = false
     }
   }
 }

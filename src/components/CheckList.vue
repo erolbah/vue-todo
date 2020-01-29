@@ -68,14 +68,14 @@ export default {
         {
           id: 2,
           title: 'Oplevering glaswerk',
-          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+          description: '',
           completed: false,
           editing: false
         },
         {
           id: 3,
           title: 'Beschadigingen op kozijnwerk controleren',
-          description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden',
+          description: '',
           completed: false,
           editing: false
         },
