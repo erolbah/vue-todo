@@ -49,7 +49,7 @@ export default {
           title: 'Afvoer',
           description: '',
           completed: false,
-          delcine: false,
+          decline: false,
           nvt: false,
           editing: false,
           // todoTasks:[
@@ -205,6 +205,8 @@ export default {
         return this.todos.filter(todo => !todo.completed)
       } else if (this.filter == 'completed') {
         return this.todos.filter(todo => todo.completed)
+      } else if (this.filter == 'decline') {
+        return this.todos.filter(todo => todo.decline)
       }
       return this.todos
     },
@@ -221,6 +223,8 @@ export default {
         id: this.idForTodo,
         title: this.newTodo,
         completed: false,
+        decline: false,
+        nvt: false
       })
       this.newTodo = ''
       this.idForTodo++

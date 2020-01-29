@@ -93,6 +93,8 @@ export default {
         title: this.title,
         description: this.description,
         completed: this.completed,
+        decline: this.decline,
+        nvt: this.nvt,
         editing: this.editing,
       })
     },
