@@ -2,6 +2,8 @@
   <div class="todo-item">
     <div class="todo-item-left">
       <input type="checkbox" v-model="completed" @change="doneEdit">
+      <input type="checkbox" v-model="decline" @change="doneEdit">
+      <input type="checkbox" v-model="nvt" @change="doneEdit">
       <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed }">{{ title }}</div>
       <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </div>
@@ -49,6 +51,8 @@ export default {
       title: this.todo.title,
       description: this.description,
       completed: this.todo.completed,
+      decline: this.todo.decline,
+      nvt: this.todo.nvt,
       editing: this.todo.editing,
       beforeEditCache: '',
       showModal: false

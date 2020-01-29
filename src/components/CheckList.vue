@@ -13,9 +13,11 @@
 
     <div class="extra-container">
       <div>
-        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">All</button>
-        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Active</button>
-        <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</button>
+        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">Alles</button>
+        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Actief</button>
+        <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Goedgekeurd</button>
+        <button :class="{ active: filter == 'decline' }" @click="filter = 'decline'">Afgekeurd</button>
+        <button :class="{ active: filter == 'nvt' }" @click="filter = 'nvt'">nvt</button>
       </div>
 
       <div>
@@ -47,6 +49,8 @@ export default {
           title: 'Afvoer',
           description: '',
           completed: false,
+          delcine: false,
+          nvt: false,
           editing: false,
           // todoTasks:[
           //   {
@@ -70,6 +74,8 @@ export default {
           title: 'Oplevering glaswerk',
           description: '',
           completed: false,
+          delcine: false,
+          nvt: false,
           editing: false
         },
         {
@@ -77,6 +83,8 @@ export default {
           title: 'Beschadigingen op kozijnwerk controleren',
           description: '',
           completed: false,
+          delcine: false,
+          nvt: false,
           editing: false
         },
       ],
