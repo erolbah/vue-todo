@@ -1,69 +1,39 @@
 <template>
-  <div class="hello">
-    <h1>Bouwwerk controlelijst</h1>
-    <input type="text" 
-      class="todo-input" 
-      placeholder="Voer handmatig checklist item in" 
-      v-model="newTodo" 
-      @keyup.enter="addTodo">
+  <div>
+    <input type="text" class="todo-input" placeholder="What needs to be done" v-model="newTodo" @keyup.enter="addTodo">
     <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
-      <todo-item v-for="(todo, index) in todosFiltered" :key="todo.id" :todo="todo" :index="index" @removedTodo="removeTodo" @finishedEdit="finishedEdit(data)">
-        <!-- <div class="todo-item-left">
-          <input type="checkbox" v-model="todo.completed">
-          <div v-if="!todo.editing" 
-            @dblclick="editTodo(todo)" 
-            class="todo-item-label"
-            :class="{ completed : todo.completed }">
-              {{todo.title}}</div>
-          <input v-else 
-            class="todo-item-edit" 
-            type="text" 
-            v-model="todo.title" 
-            @blur="doneEdit(todo)" 
-            @keyup.enter="doneEdit(todo)" 
-            @keyup.esc="cancelEdit(todo)" 
-            v-focus>
-            <div v-for="subGroup in todo.subGroups" :key="subGroup.id">{{subGroup.title}}
-              <div v-for="task in subGroup.tasks" :key="task.id" class="todo-item-child">{{task.title}}</div>
-            </div>
-        </div>
-        <div class="remove-item" @click="removeTodo(index)">
-          &times;
-        </div> -->
-      </todo-item>
+    <todo-item v-for="todo in todosFiltered" :key="todo.id" :todo="todo" :checkAll="!anyRemaining" @removedTodo="removeTodo" @finishedEdit="finishedEdit">
+    </todo-item>
     </transition-group>
+
     <div class="extra-container">
-      <div class="">
-        <label for="">
-          <input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">
-          Check all
-        </label>
-      </div>
-      <div class="">{{remaining}} items left</div>
+      <div><label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos"> Check All</label></div>
+      <div>{{ remaining }} items left</div>
     </div>
+
     <div class="extra-container">
-      <div class="">
-        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">Alles</button>
-        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Actief</button>
+      <div>
+        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">All</button>
+        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Active</button>
         <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</button>
       </div>
-      <div class="">
+
+      <div>
         <transition name="fade">
-          <button v-if="showClearCompletedButton" @click="clearCompleted">Clear completed</button>
+        <button v-if="showClearCompletedButton" @click="clearCompleted">Clear Completed</button>
         </transition>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-
-import TodoItem from './TodoItem.vue'
-
+import TodoItem from './TodoItem'
 export default {
-  name: 'Todo-list',
+  name: 'todo-list',
   components: {
-    TodoItem
+    TodoItem,
   },
   data () {
     return {
@@ -75,25 +45,25 @@ export default {
         {
           id: 1,
           title: 'Afvoer',
-          description: 'Hoofdgroep',
+          description: '',
           completed: false,
           editing: false,
-          todoTasks:[
-            {
-            id: 1,
-            title: 'Afvoer controleren op afvoercapaciteit',
-            description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
-            completed: false,
-            editing: false
-            },
-            {
-            id: 2,
-            title: 'Afvoer opnieuw aanleggen',
-            description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
-            completed: false,
-            editing: false
-            }
-          ]
+          // todoTasks:[
+          //   {
+          //   id: 1,
+          //   title: 'Afvoer controleren op afvoercapaciteit',
+          //   description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
+          //   completed: false,
+          //   editing: false
+          //   },
+          //   {
+          //   id: 2,
+          //   title: 'Afvoer opnieuw aanleggen',
+          //   description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
+          //   completed: false,
+          //   editing: false
+          //   }
+          // ]
         },
         {
           id: 2,
@@ -218,15 +188,14 @@ export default {
       return this.todos.filter(todo => !todo.completed).length
     },
     anyRemaining() {
-      // controleerd computed property remaining, als deze niet 0 is dan false.
       return this.remaining != 0
     },
     todosFiltered() {
-      if(this.filter === 'all'){
+      if (this.filter == 'all') {
         return this.todos
-      } else if (this.filter === 'active') {
+      } else if (this.filter == 'active') {
         return this.todos.filter(todo => !todo.completed)
-      } else if (this.filter === 'completed') {
+      } else if (this.filter == 'completed') {
         return this.todos.filter(todo => todo.completed)
       }
       return this.todos
@@ -235,45 +204,22 @@ export default {
       return this.todos.filter(todo => todo.completed).length > 0
     }
   },
-  directives: {
-    focus: {
-      // directive definition
-      inserted: function (el) {
-        el.focus()
-      }
-    }
-  },
   methods: {
-    addTodo () {
-      if(this.newTodo.length === 0){
+    addTodo() {
+      if (this.newTodo.trim().length == 0) {
         return
       }
       this.todos.push({
         id: this.idForTodo,
         title: this.newTodo,
-        description: this.newTodo,
-        completed: false
+        completed: false,
       })
-
       this.newTodo = ''
       this.idForTodo++
     },
-    removeTodo(index){
+    removeTodo(id) {
+      const index = this.todos.findIndex((item) => item.id == id)
       this.todos.splice(index, 1)
-    },
-    editTodo(todo) {
-      this.beforeEditCache = todo.title
-      todo.editing = true
-    },
-    doneEdit(todo){
-      if(todo.title.trim() === ''){
-        todo.title = this.beforeEditCache
-      }
-      todo.editing = false
-    },
-    cancelEdit(todo) {
-      todo.title = this.beforeEditCache
-      todo.editing = false
     },
     checkAllTodos() {
       this.todos.forEach((todo) => todo.completed = event.target.checked)
@@ -282,13 +228,13 @@ export default {
       this.todos = this.todos.filter(todo => !todo.completed)
     },
     finishedEdit(data) {
-      this.todos.splice(data.index, 1, data.todo)
+      const index = this.todos.findIndex((item) => item.id == data.id)
+      this.todos.splice(index, 1, data)
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
   .todo-input {
@@ -304,18 +250,32 @@ export default {
     margin-bottom: 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
     animation-duration: 0.3s;
   }
   .remove-item {
     cursor: pointer;
+    justify-content: flex-end;
     margin-left: 14px;
+    display: flex;
+    flex: 1;
+    &:hover {
+      color: black;
+    }
+  }
+  .description-item{
+    cursor: pointer;
+    justify-content: flex-end;
+    margin-left: 14px;
+    display: flex;
+    flex: 1;
     &:hover {
       color: black;
     }
   }
   .todo-item-left { // later
     display: flex;
+    flex: 1 100%;
     align-items: center;
   }
   .todo-item-label {
@@ -370,3 +330,4 @@ export default {
     opacity: 0;
   }
 </style>
+
