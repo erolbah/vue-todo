@@ -67,6 +67,7 @@ export default {
         description: this.description,
         editing: this.editing,
       })
+      this.showModal = false
     },
   }
 }
