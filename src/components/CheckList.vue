@@ -7,8 +7,8 @@
     </transition-group>
 
     <div class="extra-container">
-      <div><label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos"> Check All</label></div>
-      <div>{{ remaining }} items left</div>
+      <div><label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos"> Alles goedkeuren</label></div>
+      <div>{{ remaining }} items over</div>
     </div>
 
     <div class="extra-container">
@@ -22,7 +22,7 @@
 
       <div>
         <transition name="fade">
-        <button v-if="showClearCompletedButton" @click="clearCompleted">Clear Completed</button>
+        <button v-if="showClearCompletedButton" @click="clearCompleted">Verwijder Goedgekeurd</button>
         </transition>
       </div>
 
@@ -193,6 +193,7 @@ export default {
   },
   computed: {
     remaining() {
+      // return this.todos.filter(todo => !todo.completed && !todo.decline && !todo.nvt).length
       return this.todos.filter(todo => !todo.completed).length
     },
     anyRemaining() {

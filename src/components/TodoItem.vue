@@ -65,8 +65,14 @@ export default {
       // } else {
       //   this.completed = this.todo.completed
       // }
+    // TODO: Uitvinken 
       this.nvt = false
       this.decline = false
+
+      // if(this.nvt.length == 0 && this.decline.length == 0){
+      //   this.completed = this.checkAll ? true : this.todo.completed
+      // }
+      
       this.completed = this.checkAll ? true : this.todo.completed
     }
   },
