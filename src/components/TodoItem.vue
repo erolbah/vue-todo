@@ -4,7 +4,7 @@
       <input type="checkbox" v-model="completed" @change="doneEdit">
       <input type="checkbox" v-model="decline" @change="doneEdit">
       <input type="checkbox" v-model="nvt" @change="doneEdit">
-      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed }">{{ title }}</div>
+      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed, decline : decline, nvt : nvt }">{{ title }}</div>
       <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </div>
     <!-- Wel een description -->
@@ -65,13 +65,9 @@ export default {
       // } else {
       //   this.completed = this.todo.completed
       // }
-    // TODO: Uitvinken 
+
       this.nvt = false
       this.decline = false
-
-      // if(this.nvt.length == 0 && this.decline.length == 0){
-      //   this.completed = this.checkAll ? true : this.todo.completed
-      // }
       
       this.completed = this.checkAll ? true : this.todo.completed
     }
@@ -96,6 +92,7 @@ export default {
         this.title = this.beforeEditCache
       }
       this.editing = false
+
       this.$emit('finishedEdit', {
         id: this.id,
         title: this.title,

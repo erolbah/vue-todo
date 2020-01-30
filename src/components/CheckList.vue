@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" class="todo-input" placeholder="What needs to be done" v-model="newTodo" @keyup.enter="addTodo">
+    <input type="text" class="todo-input" placeholder="Wat moet er gebeuren" v-model="newTodo" @keyup.enter="addTodo">
     <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
     <todo-item v-for="todo in todosFiltered" :key="todo.id" :todo="todo" :checkAll="!anyRemaining" @removedTodo="removeTodo" @finishedEdit="finishedEdit">
     </todo-item>
@@ -196,6 +196,19 @@ export default {
       // return this.todos.filter(todo => !todo.completed && !todo.decline && !todo.nvt).length
       return this.todos.filter(todo => !todo.completed).length
     },
+    checkedBoxes() {
+      // Controle block zodat 1 van de 3 checkboxes actief kan zijn.
+      if(this.completed){
+        return !this.decline && !this.nvt
+      }
+      if(this.decline){
+        return !this.completed && !this.nvt
+      }
+      if(this.nvt){
+        return !this.completed && !this.decine
+      }
+      return this.todos
+    },
     anyRemaining() {
       return this.remaining != 0
     },
@@ -203,11 +216,13 @@ export default {
       if (this.filter == 'all') {
         return this.todos
       } else if (this.filter == 'active') {
-        return this.todos.filter(todo => !todo.completed)
+        return this.todos.filter(todo => !todo.completed && !todo.decline &&  !todo.nvt)
       } else if (this.filter == 'completed') {
         return this.todos.filter(todo => todo.completed)
       } else if (this.filter == 'decline') {
         return this.todos.filter(todo => todo.decline)
+      } else if (this.filter == 'nvt') {
+        return this.todos.filter(todo => todo.nvt)
       }
       return this.todos
     },
@@ -316,6 +331,14 @@ export default {
   }
   .completed {
     text-decoration: line-through;
+    color: grey;
+  }
+  .decline {
+    text-decoration: line-through;
+    color: red;
+  }
+  .nvt {
+    // text-decoration: line-through;
     color: grey;
   }
   .extra-container {
