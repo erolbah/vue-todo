@@ -234,6 +234,12 @@ export default {
       this.todos.splice(index, 1)
     },
     checkAllTodos() {
+      if(this.todos.filter(todo => todo.decline).length > 0){
+        this.todos.filter(todo => todo.decline = false)
+      }
+      if(this.todos.filter(todo => todo.nvt).length > 0){
+        this.todos.filter(todo => todo.nvt = false)
+      }
       this.todos.forEach((todo) => todo.completed = event.target.checked)
     },
     clearCompleted() {

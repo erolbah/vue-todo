@@ -65,6 +65,8 @@ export default {
       // } else {
       //   this.completed = this.todo.completed
       // }
+      this.nvt = false
+      this.decline = false
       this.completed = this.checkAll ? true : this.todo.completed
     }
   },
