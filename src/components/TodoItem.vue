@@ -4,22 +4,22 @@
       <input type="checkbox" v-model="completed" @change="doneEdit">
       <input type="checkbox" v-model="decline" @change="doneEdit">
       <input type="checkbox" v-model="nvt" @change="doneEdit">
-      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed, decline : decline, nvt : nvt }">{{ title }}</div>
+      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed, decline : decline, nvt : nvt }">{{ task.title }}</div>
       <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
     </div>
     <!-- Wel een description -->
-    <div v-if="!todo.description==''||todo.description" class="description-item" @click="editRemark">
+    <div v-if="!task.description==''||task.description" class="description-item" @click="editRemark">
       &#9917;
     </div>
     <!-- Geen description -->
-    <div v-if="todo.description==''|| todo.description === undefined" class="description-item" @click="editRemark">
+    <div v-if="task.description==''|| task.description === undefined" class="description-item" @click="editRemark">
       &#9918;
     </div>
-    <div class="remove-item" @click="removeTodo(todo.id)">
+    <div class="remove-item" @click="removeTodo(task.id)">
       &times;
     </div>
     <modal v-bind="$props" v-if="showModal" @finishedEditModal="finishedEditModal">
-      <h2 slot="header">{{todo.title}}</h2>
+      <h2 slot="header">{{task.title}}</h2>
       <h3 slot="subHeader">Opmerking:</h3>
       <!-- <p slot="body" v-if="!editing" @dblclick="editTodo" :class="{ completed : completed }">{{ description }}</p> -->
       <input class="todo-item-edit" type="text" v-model="description" slot="body" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
@@ -36,7 +36,7 @@ export default {
     Modal
   },
   props: {
-    todo: {
+    task: {
       type: Object,
       required: true,
     },
@@ -47,13 +47,13 @@ export default {
   },
   data() {
     return {
-      id: this.todo.id,
-      title: this.todo.title,
+      id: this.task.id,
+      title: this.task.title,
       description: this.description,
-      completed: this.todo.completed,
-      decline: this.todo.decline,
-      nvt: this.todo.nvt,
-      editing: this.todo.editing,
+      completed: this.task.completed,
+      decline: this.task.decline,
+      nvt: this.task.nvt,
+      editing: this.task.editing,
       beforeEditCache: '',
       showModal: false
     }
@@ -69,7 +69,7 @@ export default {
       this.nvt = false
       this.decline = false
       
-      this.completed = this.checkAll ? true : this.todo.completed
+      this.completed = this.checkAll ? true : this.task.completed
     }
   },
   directives: {
@@ -112,10 +112,9 @@ export default {
     },
     finishedEditModal(data) {
       if(data.description === null){
-        return this.todo.description === ''
+        return this.task.description === ''
       }
-      this.todo.description === data.decription
-      // alert(this.data)
+      this.task.description === data.decription
       this.showModal = false
     }
   }
