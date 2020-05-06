@@ -1,28 +1,27 @@
 <template>
   <div class="todo-item">
     <div class="todo-item-left">
-      <input type="checkbox" v-model="completed" @change="doneEdit">
-      <input type="checkbox" v-model="decline" @change="doneEdit">
-      <input type="checkbox" v-model="nvt" @change="doneEdit">
-      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label" :class="{ completed : completed, decline : decline, nvt : nvt }">{{ task.title }}</div>
-      <input v-else class="todo-item-edit" type="text" v-model="title" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
+      <input type="checkbox" v-model="completed" >
+      <input type="checkbox" v-model="decline" >
+      <input type="checkbox" v-model="nvt" >
+      <div v-if="!editing" class="todo-item-label" :class="{ completed : completed, decline : decline, nvt : nvt }">{{ task.title }}</div>
+      <input v-else class="todo-item-edit" type="text" v-model="title" v-focus>
     </div>
     <!-- Wel een description -->
-    <div v-if="!task.description==''||task.description" class="description-item" @click="editRemark">
+    <div v-if="!task.description==''||task.description" class="description-item" >
       &#9917;
     </div>
     <!-- Geen description -->
-    <div v-if="task.description==''|| task.description === undefined" class="description-item" @click="editRemark">
+    <div v-if="task.description==''|| task.description === undefined" class="description-item">
       &#9918;
     </div>
-    <div class="remove-item" @click="removeTodo(task.id)">
+    <div class="remove-item">
       &times;
     </div>
-    <modal v-bind="$props" v-if="showModal" @finishedEditModal="finishedEditModal">
+    <modal v-bind="$props" v-if="showModal" >
       <h2 slot="header">{{task.title}}</h2>
       <h3 slot="subHeader">Opmerking:</h3>
-      <!-- <p slot="body" v-if="!editing" @dblclick="editTodo" :class="{ completed : completed }">{{ description }}</p> -->
-      <input class="todo-item-edit" type="text" v-model="description" slot="body" @blur="doneEdit" @keyup.enter="doneEdit" @keyup.esc="cancelEdit" v-focus>
+      <input class="todo-item-edit" type="text" v-model="description" slot="body" v-focus>
     </modal>
   </div>
 </template>
@@ -80,43 +79,43 @@ export default {
     }
   },
   methods: {
-    removeTodo(id) {
-      this.$emit('removedTodo', id)
-    },
-    editTodo() {
-      this.beforeEditCache = this.title
-      this.editing = true
-    },
-    doneEdit() {
-      if (this.title.trim() == '') {
-        this.title = this.beforeEditCache
-      }
-      this.editing = false
+    // removeTodo(id) {
+    //   this.$emit('removedTodo', id)
+    // },
+    // editTodo() {
+    //   this.beforeEditCache = this.title
+    //   this.editing = true
+    // },
+    // doneEdit() {
+    //   if (this.title.trim() == '') {
+    //     this.title = this.beforeEditCache
+    //   }
+    //   this.editing = false
 
-      this.$emit('finishedEdit', {
-        id: this.id,
-        title: this.title,
-        description: this.description,
-        completed: this.completed,
-        decline: this.decline,
-        nvt: this.nvt,
-        editing: this.editing,
-      })
-    },
-    cancelEdit() {
-      this.title = this.beforeEditCache
-      this.editing = false
-    },
-    editRemark() {
-      this.showModal = true
-    },
-    finishedEditModal(data) {
-      if(data.description === null){
-        return this.task.description === ''
-      }
-      this.task.description === data.decription
-      this.showModal = false
-    }
+    //   this.$emit('finishedEdit', {
+    //     id: this.id,
+    //     title: this.title,
+    //     description: this.description,
+    //     completed: this.completed,
+    //     decline: this.decline,
+    //     nvt: this.nvt,
+    //     editing: this.editing,
+    //   })
+    // },
+    // cancelEdit() {
+    //   this.title = this.beforeEditCache
+    //   this.editing = false
+    // },
+    // editRemark() {
+    //   this.showModal = true
+    // },
+    // finishedEditModal(data) {
+    //   if(data.description === null){
+    //     return this.task.description === ''
+    //   }
+    //   this.task.description === data.decription
+    //   this.showModal = false
+    // }
   }
 }
 </script>

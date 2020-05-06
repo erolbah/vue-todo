@@ -43,18 +43,18 @@
 export default {
   name: 'modal',
   props: {
-    todo: {
+    task: {
       type: Object,
       required: true,
     }
   },
   data() {
     return {
-      id: this.todo.id,
-      title: this.todo.title,
-      description: this.description,
-      completed: this.todo.completed,
-      editing: this.todo.editing,
+      id: this.task.id,
+      title: this.task.title,
+      description: this.task.description,
+      completed: this.task.completed,
+      editing: this.task.editing,
       beforeEditCache: '',
       showModal: true
     }
@@ -63,8 +63,8 @@ export default {
     doneEdit() {
       this.editing = false
       this.$emit('finishedEditModal', {
-        id: this.todo.id,
-        description: this.description,
+        id: this.task.id,
+        description: this.task.description,
         editing: this.editing,
       })
       this.showModal = false

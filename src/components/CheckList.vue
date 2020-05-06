@@ -1,44 +1,16 @@
 <template>
   <div>
-    <input type="text" class="todo-input" placeholder="Wat moet er gebeuren" v-model="newTodo" @keyup.enter="addTodo">
+    <h1>Checklist</h1>
     <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
       <div class="group" v-for="(todo, index) in todos" :key="index">
-        <h1>{{todo.title}}</h1>
+        <h2>{{todo.title}}</h2>
         <div v-for="(subGroup, key) in todo.subGroups" :key="key">
           <h3>{{subGroup.title}}</h3>
-          <!-- <div class="" v-for="(task, key) in subGroup.tasks" :key="key">
-            <p>{{task.title}}</p>
-          </div> -->
           <todo-item v-for="(task, key) in subGroup.tasks" :key="key" :task="task" :checkAll="!anyRemaining" @removedTodo="removeTodo" @finishedEdit="finishedEdit">
           </todo-item>
         </div>
-        <!-- <todo-item v-for="todo in todosFiltered" :key="todo.id" :todo="todo" :checkAll="!anyRemaining" @removedTodo="removeTodo" @finishedEdit="finishedEdit">
-        </todo-item> -->
       </div>
-    
     </transition-group>
-
-    <div class="extra-container">
-      <div><label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos"> Alles goedkeuren</label></div>
-      <div>{{ remaining }} items over</div>
-    </div>
-
-    <div class="extra-container">
-      <div>
-        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">Alles</button>
-        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Actief</button>
-        <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Goedgekeurd</button>
-        <button :class="{ active: filter == 'decline' }" @click="filter = 'decline'">Afgekeurd</button>
-        <button :class="{ active: filter == 'nvt' }" @click="filter = 'nvt'">nvt</button>
-      </div>
-
-      <div>
-        <transition name="fade">
-        <button v-if="showClearCompletedButton" @click="clearCompleted">Verwijder Goedgekeurd</button>
-        </transition>
-      </div>
-
-    </div>
   </div>
 </template>
 
@@ -54,7 +26,6 @@ export default {
       newTodo: '',
       beforeEditCache: '',
       idForTodo: 4, 
-      filter: 'all',
       todos: [ 
         {
           id: 1,
@@ -68,6 +39,7 @@ export default {
               description: 'Subgroep',
               completed: false,
               editing: false,
+              filter: 'all',
               tasks:[
                 {
                 id: 1,
@@ -75,6 +47,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 },
                 {
@@ -83,6 +56,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 }
               ]
@@ -93,6 +67,7 @@ export default {
               description: 'Subgroep',
               completed: false,
               editing: false,
+              filter: 'all',
               tasks:[
                 {
                 id: 1,
@@ -100,6 +75,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 },
                 {
@@ -108,6 +84,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 },
                 {
@@ -116,6 +93,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 },
                 {
@@ -124,6 +102,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 }
               ]
@@ -142,6 +121,7 @@ export default {
               description: 'Subgroep',
               completed: false,
               editing: false,
+              filter: 'all',
               tasks:[
                 {
                 id: 1,
@@ -150,6 +130,7 @@ export default {
                 completed: false,
                 editing: false,
                 delcine: false,
+                filter: 'all',
                 nvt: false
                 },
                 {
@@ -158,6 +139,7 @@ export default {
                 description: '',
                 completed: false,
                 editing: false,
+                filter: 'all',
                 nvt: false
                 }
               ]
@@ -165,58 +147,13 @@ export default {
           ],
         },
       ]
-      // todos: [
-      //   {
-      //     id: 1,
-      //     title: 'Afvoer',
-      //     description: '',
-      //     completed: false,
-      //     decline: false,
-      //     nvt: false,
-      //     editing: false,
-      //     // todoTasks:[
-      //     //   {
-      //     //   id: 1,
-      //     //   title: 'Afvoer controleren op afvoercapaciteit',
-      //     //   description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
-      //     //   completed: false,
-      //     //   editing: false
-      //     //   },
-      //     //   {
-      //     //   id: 2,
-      //     //   title: 'Afvoer opnieuw aanleggen',
-      //     //   description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
-      //     //   completed: false,
-      //     //   editing: false
-      //     //   }
-      //     // ]
-      //   },
-      //   {
-      //     id: 2,
-      //     title: 'Oplevering glaswerk',
-      //     description: '',
-      //     completed: false,
-      //     delcine: false,
-      //     nvt: false,
-      //     editing: false
-      //   },
-      //   {
-      //     id: 3,
-      //     title: 'Beschadigingen op kozijnwerk controleren',
-      //     description: '',
-      //     completed: false,
-      //     delcine: false,
-      //     nvt: false,
-      //     editing: false
-      //   },
-      // ],
      }
   },
   computed: {
-    remaining() {
-      // return this.todos.filter(todo => !todo.completed && !todo.decline && !todo.nvt).length
-      return this.todos.filter(todo => !todo.completed).length
-    },
+    // remaining() {
+    //   // return this.todos.filter(todo => !todo.completed && !todo.decline && !todo.nvt).length
+    //   return this.tasks.filter(task => !task.completed).length
+    // },
     checkedBoxes() {
       // Controle block zodat 1 van de 3 checkboxes actief kan zijn.
       if(this.completed){
@@ -228,27 +165,27 @@ export default {
       if(this.nvt){
         return !this.completed && !this.decine
       }
-      return this.todos
+      return this.tasks
     },
     anyRemaining() {
       return this.remaining != 0
     },
     todosFiltered() {
       if (this.filter == 'all') {
-        return this.todos
+        return this.tasks
       } else if (this.filter == 'active') {
-        return this.todos.filter(todo => !todo.completed && !todo.decline &&  !todo.nvt)
+        return this.tasks.filter(task => !task.completed && !task.decline &&  !task.nvt)
       } else if (this.filter == 'completed') {
-        return this.todos.filter(todo => todo.completed)
+        return this.tasks.filter(task => task.completed)
       } else if (this.filter == 'decline') {
-        return this.todos.filter(todo => todo.decline)
+        return this.tasks.filter(task => task.decline)
       } else if (this.filter == 'nvt') {
-        return this.todos.filter(todo => todo.nvt)
+        return this.tasks.filter(task => task.nvt)
       }
-      return this.todos
+      return this.tasks
     },
     showClearCompletedButton() {
-      return this.todos.filter(todo => todo.completed).length > 0
+      return this.task.filter(task => task.completed).length > 0
     }
   },
   methods: {
@@ -256,7 +193,7 @@ export default {
       if (this.newTodo.trim().length == 0) {
         return
       }
-      this.todos.push({
+      this.tasks.push({
         id: this.idForTodo,
         title: this.newTodo,
         completed: false,
@@ -267,24 +204,24 @@ export default {
       this.idForTodo++
     },
     removeTodo(id) {
-      const index = this.todos.findIndex((item) => item.id == id)
-      this.todos.splice(index, 1)
+      const index = this.tasks.findIndex((item) => item.id == id)
+      this.tasks.splice(index, 1)
     },
     checkAllTodos() {
-      if(this.todos.filter(todo => todo.decline).length > 0){
-        this.todos.filter(todo => todo.decline = false)
+      if(this.tasks.filter(task => task.decline).length > 0){
+        this.tasks.filter(task => task.decline = false)
       }
-      if(this.todos.filter(todo => todo.nvt).length > 0){
-        this.todos.filter(todo => todo.nvt = false)
+      if(this.tasks.filter(task => task.nvt).length > 0){
+        this.tasks.filter(task => task.nvt = false)
       }
-      this.todos.forEach((todo) => todo.completed = event.target.checked)
+      this.tasks.forEach((task) => task.completed = event.target.checked)
     },
-    clearCompleted() {
-      this.todos = this.todos.filter(todo => !todo.completed)
-    },
+    // clearCompleted() {
+    //   this.tasks = this.tasks.filter(task => !task.completed)
+    // },
     finishedEdit(data) {
-      const index = this.todos.findIndex((item) => item.id == data.id)
-      this.todos.splice(index, 1, data)
+      const index = this.tasks.findIndex((item) => item.id == data.id)
+      this.tasks.splice(index, 1, data)
     }
   }
 }
@@ -394,3 +331,50 @@ export default {
   }
 </style>
 
+<!----
+// todos: [
+      //   {
+      //     id: 1,
+      //     title: 'Afvoer',
+      //     description: '',
+      //     completed: false,
+      //     decline: false,
+      //     nvt: false,
+      //     editing: false,
+      //     // todoTasks:[
+      //     //   {
+      //     //   id: 1,
+      //     //   title: 'Afvoer controleren op afvoercapaciteit',
+      //     //   description: 'Deze afvoer werkt niet correct en zal opnieuw aangelegt moeten worden SUBGROEP',
+      //     //   completed: false,
+      //     //   editing: false
+      //     //   },
+      //     //   {
+      //     //   id: 2,
+      //     //   title: 'Afvoer opnieuw aanleggen',
+      //     //   description: 'Afvoer zit verstopt en moet opnieuw aangelegt SUBGROEP',
+      //     //   completed: false,
+      //     //   editing: false
+      //     //   }
+      //     // ]
+      //   },
+      //   {
+      //     id: 2,
+      //     title: 'Oplevering glaswerk',
+      //     description: '',
+      //     completed: false,
+      //     delcine: false,
+      //     nvt: false,
+      //     editing: false
+      //   },
+      //   {
+      //     id: 3,
+      //     title: 'Beschadigingen op kozijnwerk controleren',
+      //     description: '',
+      //     completed: false,
+      //     delcine: false,
+      //     nvt: false,
+      //     editing: false
+      //   },
+      // ],
+---->
